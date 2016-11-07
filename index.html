@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html class="nojs">
+    <head>
+        <!-- -->
+        <style>
+            *{ padding: 0px; margin: 0px; }
+
+            html, body
+            {
+                overflow: hidden;
+                background: black;
+                width:100%;
+                height: 100%;
+            }
+
+            #fade
+            {
+                display: block;
+                background: black; 
+                color: white;
+                text-align: left;
+                padding: 50px;
+                position: absolute;
+                bottom: 0;top: 0;left: 0;right: 0;
+                z-index: 9;
+            }
+            .nojs #fade  {display: none;}
+            #clipwrap
+            {
+                position: relative;
+                height: 100%;
+                display: table;
+                width: 100%; 
+            }
+
+            #foreground
+            {
+                display: block;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                width: 100%;
+                opacity: 1;
+            }
+
+            #foreground img
+            {
+                width: 100%;
+                display:block;
+
+            }
+            #foreground #feelsguy{
+                position: absolute;
+                top:0;
+                left:0;
+                opacity: 0;
+            }
+            #foreground:hover #feelsguy{
+                opacity: 1;
+               
+            }
+            #foreground:hover #manhattan{
+                opacity: 0;
+               
+            }
+            
+            .trans-op{
+                transition: 3s  opacity; 
+                transition-timing-function:  ease-in;
+            }
+            
+            #foreground img.head
+            {
+                height: 19.52380952380952%
+            }
+            #foreground img.body
+            {
+                height: 80.47619047619048%
+            }
+
+
+            @keyframes rotate-anticw-360 {
+
+                0% {
+                    transform: rotate(360deg);
+                }
+                100%  {
+                    transform: rotate(0deg);
+                }
+            }
+
+            @keyframes rotate-cw-360{
+                0% {
+                    transform: rotate(0deg);
+                }
+                100%  {
+                    
+                }
+            }
+
+            #background
+            {
+                display: block;
+                opacity: .9;
+                background: url("images/starscape3.jpg") no-repeat center;
+                background-size: cover;
+                width: 200%;
+                height: 200%;
+                position: fixed;
+                top: -58%;
+                left: -53%;
+
+            }
+
+            #backgroundholder
+            {
+                display: block;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                width: 100%;
+                min-height: 100%;
+                opacity: 1;
+            }
+            .rotate360
+            {
+
+               /* animation-duration: 5s;  
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                */
+                perspective: 1000px;
+                transform-origin: center;
+                transition: 588s  transform; 
+                transition-timing-function:  linear;
+            }
+
+            .rotate360.cw{
+                
+                transform: rotate(1488deg);
+            }
+            .rotate360.anticw{
+                
+                transform: rotate(-1488deg);
+            }
+
+            #imgwrap{
+                min-height: 50%;
+                min-width: 100%
+            }
+        </style>
+        <script type="text/javascript" src="js/jakeweary-2.1.4.min.js"></script>
+        <script type="text/javascript" src="js/consolelog.js"></script>
+        <!-- <script type="text/javascript" src="js/jakeweary.waitforimages.min.js"></script> -->
+        <script type="text/javascript" src="js/jakeweary.throttle_debounce.js"></script>  <!-- http://benalman.com/projects/jquery-throttle-debounce-plugin/ -->
+    </head>
+    <body>
+        <!--
+        <div id="fade">
+            Loading...
+        </div>
+        -->
+        <div id="clipwrap">
+            <!--
+                        <img id="background" class="tiltrotate" src="http://i.imgur.com/tmFkpmt.jpg"  />
+                        <div id="foreground" ><img src="http://a.pomf.cat/zmyroj.png" /><img src="http://i.imgur.com/4ujwVqc.jpg" /></div>
+            -->
+
+        <div id="backgroundholder">
+            <div id="background"  class="rotate360" ></div>            
+        </div>
+        <div id="foreground" >
+            <div id="imgwrap">
+                <img id="manhattan" class="head trans-op" src="images/head.png" />
+                <img id="feelsguy" class="head trans-op" src="images/feels_foreground_cut.png" />
+                <img id="watchmen" src="images/feels_foreground.jpg" />
+                
+            </div>
+        </div>
+
+    </div>
+    
+    <script type="text/javascript" >
+        "use strict";
+        var controlRotateSpeed = function (evt){
+            console.log(evt, evt.pageX, (evt.pageX > window.innerWidth/2) ); /* Mouse is over half the screen*/
+            
+            if (evt.pageX > window.innerWidth/2){
+                $( evt.target ).filter(".anticw").toggleClass("cw anticw");                                
+            } else {
+                $( evt.target ).filter(".cw").toggleClass("cw anticw");
+            }
+            
+        }
+        
+        var thr_controlRotateSpeed = $.throttle( 1000, controlRotateSpeed );
+        var deb_controlRotateSpeed = $.debounce( 250, controlRotateSpeed );
+        
+        $(document).ready(function () {
+            $("html").removeClass("nojs");
+            $(".rotate360")
+                    .click(function ()
+                        {                
+                            $(this).toggleClass("cw anticw");
+                        })
+                    .toggleClass("cw")
+                    .mousemove( deb_controlRotateSpeed )
+            ;
+            
+
+            $("body").waitForImages(function () {
+                $("#fade").fadeOut("fast");
+            });
+        });
+    </script>
+</body>
+</html>
