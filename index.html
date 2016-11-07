@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html class="nojs">
     <head>
         <!-- -->
@@ -96,7 +96,7 @@
                     transform: rotate(0deg);
                 }
                 100%  {
-                    
+                    transform: rotate(360deg);
                 }
             }
 
@@ -187,6 +187,7 @@
     <script type="text/javascript" >
         "use strict";
         var controlRotateSpeed = function (evt){
+            /* just rotation direction for now */
             console.log(evt, evt.pageX, (evt.pageX > window.innerWidth/2) ); /* Mouse is over half the screen*/
             
             if (evt.pageX > window.innerWidth/2){
@@ -211,10 +212,11 @@
                     .mousemove( deb_controlRotateSpeed )
             ;
             
-
+            /*
             $("body").waitForImages(function () {
                 $("#fade").fadeOut("fast");
             });
+            */
         });
     </script>
 </body>
